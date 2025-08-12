@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qibla Finder | Ansar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap');
+        
+        :root {
+            --primary-color: #073332;
+            --secondary-color: #1f4a49;
+            --accent-color: #9b9c28;
+            --accent-glow: rgba(155, 156, 40, 0.4);
+            --bg-color: #073332;
+            --text-color: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.7);
+        }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: var(--bg-color);
+              margin-top: 95px; /* Ajustez cette valeur selon vos besoins */
+
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .holographic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: 
+                radial-gradient(
+                    circle at 30% 40%, 
+                    var(--secondary-color) 0%, 
+                    transparent 25%),
+                radial-gradient(
+                    circle at 70% 60%, 
+                    var(--primary-color) 0%, 
+                    transparent 25%);
+            opacity: 0.4;
+            z-index: -1;
+            animation: bgRotate 60s linear infinite;
+        }
+        
+        @keyframes bgRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .ansar-glass {
+            background: rgba(7, 51, 50, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(155, 156, 40, 0.2);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(155, 156, 40, 0.1),
+                inset 0 0 30px rgba(31, 74, 73, 0.3);
+            border-radius: 20px;
+        }
+        
+        .holographic-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .holographic-effect::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                transparent,
+                transparent,
+                transparent,
+                var(--accent-glow),
+                transparent
+            );
+            transform: rotate(30deg);
+            animation: hologram 8s linear infinite;
+            z-index: -1;
+        }
+        
+        @keyframes hologram {
+            0% { transform: translateY(-100%) rotate(30deg); }
+            100% { transform: translateY(100%) rotate(30deg); }
+        }
+
+        /* Styles de boussole */
+        .compass-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        /* Style 1 - Holographique Ansar */
+        .compass-holographic {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            background: radial-gradient(
+                circle at center,
+                rgba(31, 74, 73, 0.8),
+                rgba(7, 51, 50, 0.9)
+            );
+            border: 1px solid var(--accent-color);
+            box-shadow: 
+                0 0 30px var(--accent-glow),
+                inset 0 0 30px rgba(31, 74, 73, 0.4);
+        }
+        
+        /* Style 2 - Énergie Verte */
+        .compass-energy {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            background: 
+                radial-gradient(
+                    circle at center,
+                    rgba(31, 74, 73, 0.9),
+                    rgba(7, 51, 50, 1)
+                );
+            border: 2px solid var(--accent-color);
+            box-shadow: 
+                0 0 40px var(--accent-glow),
+                inset 0 0 20px rgba(155, 156, 40, 0.3);
+        }
+        
+        /* Style 3 - Orbes Concentriques */
+        .compass-orb {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            background: 
+                radial-gradient(
+                    circle at center,
+                    rgba(31, 74, 73, 0.8),
+                    rgba(7, 51, 50, 0.9)
+                );
+            border: 2px solid var(--accent-color);
+            box-shadow: 
+                0 0 50px var(--accent-glow),
+                inset 0 0 30px rgba(155, 156, 40, 0.5);
+            overflow: hidden;
+        }
+        
+        .compass-orb::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
+            background: 
+                radial-gradient(
+                    circle at center,
+                    transparent 60%,
+                    var(--accent-glow) 100%
+                );
+            animation: pulse 4s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.1; transform: scale(0.95); }
+            100% { opacity: 0.3; transform: scale(1.05); }
+        }
+        
+        /* Style 4 - Réseau Islamique */
+        .compass-network {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            background: 
+                radial-gradient(
+                    circle at center,
+                    rgba(31, 74, 73, 0.7),
+                    rgba(7, 51, 50, 0.9)
+                );
+            border: 1px solid var(--accent-color);
+            box-shadow: 
+                0 0 60px var(--accent-glow),
+                inset 0 0 40px rgba(155, 156, 40, 0.4);
+            overflow: hidden;
+        }
+        
+        .compass-network::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50,0 C77.6,0 100,22.4 100,50 C100,77.6 77.6,100 50,100 C22.4,100 0,77.6 0,50 C0,22.4 22.4,0 50,0 Z" fill="none" stroke="%239b9c28" stroke-width="0.5" opacity="0.3"/></svg>');
+            animation: rotate 30s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Éléments communs */
+        .compass-inner {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+        
+        .compass-markers {
+            position: absolute;
+            width: 90%;
+            height: 90%;
+            border-radius: 50%;
+        }
+        
+        .compass-marker {
+            position: absolute;
+            width: 2px;
+            height: 15px;
+            left: 50%;
+            transform-origin: bottom center;
+            background: var(--accent-color);
+            opacity: 0.7;
+        }
+        
+        .compass-cardinal {
+            position: absolute;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--accent-color);
+            transform-origin: center;
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+        
+        .compass-center {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            box-shadow: 0 0 15px var(--accent-glow);
+            z-index: 20;
+        }
+        
+        .qibla-indicator {
+            position: absolute;
+            width: 3px;
+            height: 120px;
+            background: linear-gradient(to top, transparent, var(--accent-color));
+            left: 50%;
+            bottom: 50%;
+            transform-origin: bottom center;
+            z-index: 15;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+        
+        .qibla-label {
+            position: absolute;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent-color);
+            transform: translate(-50%, -120%);
+            text-shadow: 0 0 10px var(--accent-glow);
+            background: rgba(7, 51, 50, 0.8);
+            padding: 2px 10px;
+            border-radius: 12px;
+            border: 1px solid var(--accent-color);
+            white-space: nowrap;
+        }
+        
+        .compass-direction {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-color);
+            text-shadow: 0 0 15px var(--accent-glow);
+            z-index: 20;
+        }
+        
+        .compass-style-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .style-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .style-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px var(--accent-glow);
+        }
+        
+        .style-option.selected {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 20px var(--accent-glow);
+            transform: translateY(-5px);
+        }
+        
+        .btn-ansar {
+            background: linear-gradient(135deg, rgba(155, 156, 40, 0.2), transparent);
+            border: 1px solid var(--accent-color);
+            color: var(--text-color);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-ansar:hover {
+            background: linear-gradient(135deg, rgba(155, 156, 40, 0.3), transparent);
+            box-shadow: 0 0 20px var(--accent-glow);
+            transform: translateY(-2px);
+        }
+        
+        .btn-ansar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(155, 156, 40, 0.2),
+                transparent
+            );
+            transition: all 0.6s ease;
+        }
+        
+        .btn-ansar:hover::before {
+            left: 100%;
+        }
+        
+        .input-ansar {
+            background: rgba(7, 51, 50, 0.5);
+            border: 1px solid var(--accent-color);
+            color: var(--text-color);
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .input-ansar:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px var(--accent-glow);
+            background: rgba(7, 51, 50, 0.7);
+        }
+        
+        @media (max-width: 640px) {
+            .compass-container {
+                width: 260px;
+                height: 260px;
+            }
+            
+            .compass-style-selector {
+                gap: 10px;
+            }
+            
+            .style-option {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+   <h1 class="text-3xl font-bold mb-2 font-['Orbitron'] text-transparent bg-clip-text bg-gradient-to-r from-white to-var(--accent-color)">
+            </h1>
+    <!-- Fond holographique -->
+    <div class="holographic-bg"></div>
+    
+    <!-- Conteneur principal -->
+    <div class="ansar-glass w-full max-w-md overflow-hidden p-6 holographic-effect">
+        <!-- En-tête -->
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-bold mb-2 font-['Orbitron'] text-transparent bg-clip-text bg-gradient-to-r from-white to-var(--accent-color)">
+                LA QUIBLA
+            </h1>
+            <p class="text-sm text-var(--accent-color)/80">Tournez votre appareil vers la Qibla
+
+</p>
+        </div>
+        
+        <!-- Conteneur de la boussole -->
+        <div class="compass-container">
+            <div class="compass-holographic" id="compass">
+                <div class="compass-inner">
+                    <div class="compass-markers" id="compass-markers"></div>
+                    <div class="qibla-indicator" id="qibla-indicator">
+                        <span class="qibla-label">QIBLA</span>
+                    </div>
+                    <div class="compass-center" id="accuracy-indicator"></div>
+                    <div class="compass-direction" id="current-direction">--</div>
+                </div>
+            </div>
+        </div>
+          
+        <!-- Sélecteur de style -->
+        <div class="compass-style-selector">
+            <div class="style-option selected" data-style="holographic" style="background: radial-gradient(circle at center, rgba(31, 74, 73, 0.8), rgba(7, 51, 50, 0.9)); border: 1px solid var(--accent-color);"></div>
+           
+            <div class="style-option" data-style="network" style="background: radial-gradient(circle at center, rgba(31, 74, 73, 0.7), rgba(7, 51, 50, 0.9)); border: 1px solid var(--accent-color);"></div>
+        </div>
+        
+        <!-- Panneau d'information -->
+        <div class="ansar-glass rounded-xl p-4 mb-4">
+            <div class="grid grid-cols-1 gap-3">
+                <div class="flex items-center">
+                    <div class="bg-var(--accent-color)/10 p-2 rounded-lg mr-3">
+                        <i class="fas fa-location-arrow text-var(--accent-color)"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-var(--accent-color)/80">COORDONNÉES</div>
+                        <div id="location" class="font-medium">Initialisation...</div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center">
+                    <div class="bg-var(--accent-color)/10 p-2 rounded-lg mr-3">
+                        <i class="fas fa-compass text-var(--accent-color)"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-var(--accent-color)/80">DIRECTION QIBLA</div>
+                        <div id="qibla-direction" class="font-medium">Calcul...</div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center">
+                    <div class="bg-var(--accent-color)/10 p-2 rounded-lg mr-3">
+                        <i class="fas fa-bullseye text-var(--accent-color)"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-var(--accent-color)/80">PRÉCISION</div>
+                        <div id="accuracy" class="font-medium">--</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Saisie manuelle -->
+        <div class="ansar-glass rounded-xl p-4 mb-4">
+            <div class="flex items-center mb-2">
+                <div class="bg-var(--accent-color)/10 p-2 rounded-lg mr-3">
+                    <i class="fas fa-map-marked-alt text-var(--accent-color)"></i>
+                </div>
+                <div class="text-xs text-var(--accent-color)/80">SAISIE MANUELLE</div>
+            </div>
+            <div class="grid grid-cols-2 gap-2 mb-2">
+                <input type="text" id="manual-lat" placeholder="Latitude" class="input-ansar rounded-lg p-2 text-sm">
+                <input type="text" id="manual-lng" placeholder="Longitude" class="input-ansar rounded-lg p-2 text-sm">
+            </div>
+            <button id="manual-submit" class="btn-ansar w-full py-2 rounded-lg flex items-center justify-center gap-2">
+                <i class="fas fa-check"></i> VALIDER
+            </button>
+        </div>
+        
+        <!-- Contrôles -->
+        <div class="flex justify-between gap-3 mt-4">
+            <button id="permission-btn" class="btn-ansar flex-1 py-3 rounded-lg flex items-center justify-center gap-2">
+                <i class="fas fa-location-dot"></i> <span class="hidden sm:inline">AUTORISER</span>
+            </button>
+            <button id="reload-btn" class="btn-ansar flex-1 py-3 rounded-lg flex items-center justify-center gap-2">
+                <i class="fas fa-sync-alt"></i> <span class="hidden sm:inline">ACTUALISER</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Message système -->
+    <div class="mt-6 text-center text-var(--accent-color)/60 text-xs max-w-md">
+        <p>Système de navigation Ansar - v2.0</p>
+        <p class="mt-1">Pour une meilleure précision, activez la géolocalisation et l'accès aux capteurs de votre appareil.</p>
+       <p>_____</p>
+        <p class="mt-1">_____</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Éléments DOM
+            const compassElement = document.getElementById('compass');
+            const qiblaIndicator = document.getElementById('qibla-indicator');
+            const locationDisplay = document.getElementById('location');
+            const qiblaDirectionDisplay = document.getElementById('qibla-direction');
+            const permissionBtn = document.getElementById('permission-btn');
+            const reloadBtn = document.getElementById('reload-btn');
+            const accuracyDisplay = document.getElementById('accuracy');
+            const accuracyIndicator = document.getElementById('accuracy-indicator');
+            const compassMarkers = document.getElementById('compass-markers');
+            const currentDirectionDisplay = document.getElementById('current-direction');
+            const styleOptions = document.querySelectorAll('.style-option');
+            
+            // Variables d'état
+            let currentPosition = null;
+            let currentHeading = null;
+            let qiblaDirection = null;
+            let watchId = null;
+            let currentCompassStyle = 'holographic';
+            
+            // Initialisation des marqueurs de la boussole
+            function initCompassMarkers() {
+                compassMarkers.innerHTML = '';
+                
+                // Points cardinaux principaux
+                const cardinals = [
+                    { angle: 0, label: 'N' },
+                    { angle: 90, label: 'E' },
+                    { angle: 180, label: 'S' },
+                    { angle: 270, label: 'W' }
+                ];
+                
+                // Création des marqueurs
+                for (let i = 0; i < 360; i += 15) {
+                    const marker = document.createElement('div');
+                    marker.className = 'compass-marker';
+                    marker.style.transform = `rotate(${i}deg)`;
+                    
+                    // Style différent pour les marqueurs principaux
+                    if (i % 90 === 0) {
+                        marker.style.height = '20px';
+                        marker.style.opacity = '1';
+                    } else if (i % 45 === 0) {
+                        marker.style.height = '15px';
+                    } else {
+                        marker.style.height = '10px';
+                        marker.style.opacity = '0.5';
+                    }
+                    
+                    compassMarkers.appendChild(marker);
+                }
+                
+                // Ajout des labels cardinaux
+                cardinals.forEach(point => {
+                    const cardinal = document.createElement('div');
+                    cardinal.className = 'compass-cardinal';
+                    cardinal.textContent = point.label;
+                    cardinal.style.transform = `rotate(${-point.angle}deg)`;
+                    
+                    const angleRad = (point.angle * Math.PI) / 180;
+                    const radius = 120;
+                    const x = radius * Math.sin(angleRad);
+                    const y = -radius * Math.cos(angleRad);
+                    
+                    cardinal.style.left = `calc(50% + ${x}px)`;
+                    cardinal.style.top = `calc(50% + ${y}px)`;
+                    
+                    compassMarkers.appendChild(cardinal);
+                });
+            }
+            
+            // Calcul de la direction de la Qibla
+            function calculateQiblaDirection(lat, lng) {
+                const kaabaLat = 21.422510;
+                const kaabaLng = 39.826168;
+                
+                const φ1 = lat * Math.PI / 180;
+                const φ2 = kaabaLat * Math.PI / 180;
+                const Δλ = (kaabaLng - lng) * Math.PI / 180;
+                
+                const y = Math.sin(Δλ) * Math.cos(φ2);
+                const x = Math.cos(φ1)*Math.sin(φ2) - Math.sin(φ1)*Math.cos(φ2)*Math.cos(Δλ);
+                let θ = Math.atan2(y, x);
+                
+                return ((θ * 180 / Math.PI) + 360) % 360;
+            }
+            
+            // Mise à jour de la boussole
+            function updateCompass() {
+                if (currentPosition && qiblaDirection !== null) {
+                    // Si on a l'orientation de l'appareil
+                    if (currentHeading !== null) {
+                        const adjustedDirection = (360 - currentHeading + qiblaDirection) % 360;
+                        qiblaIndicator.style.transform = `rotate(${adjustedDirection}deg)`;
+                        compassElement.style.transform = `rotate(${currentHeading}deg)`;
+                        currentDirectionDisplay.textContent = getCardinalDirection(currentHeading);
+                        
+                        // Vérification de l'alignement avec la Qibla
+                        const alignmentThreshold = 5;
+                        const alignmentDiff = Math.min(
+                            Math.abs(adjustedDirection - 0),
+                            Math.abs(adjustedDirection - 360)
+                        );
+                        
+                        if (alignmentDiff <= alignmentThreshold) {
+                            compassElement.classList.add('qibla-aligned');
+                        } else {
+                            compassElement.classList.remove('qibla-aligned');
+                        }
+                    } else {
+                        // Sans orientation, on centre simplement la Qibla
+                        qiblaIndicator.style.transform = `rotate(0deg)`;
+                        compassElement.style.transform = `rotate(${-qiblaDirection}deg)`;
+                        currentDirectionDisplay.textContent = '--';
+                    }
+                    
+                    // Mise à jour des informations
+                    locationDisplay.textContent = 
+                        `${currentPosition.coords.latitude.toFixed(6)}, ${currentPosition.coords.longitude.toFixed(6)}`;
+                    
+                    qiblaDirectionDisplay.textContent = `${Math.round(qiblaDirection)}° ${getCardinalDirection(qiblaDirection)}`;
+                    
+                    // Mise à jour de la précision
+                    if (currentPosition.coords.accuracy) {
+                        accuracyDisplay.textContent = `${Math.round(currentPosition.coords.accuracy)} mètres`;
+                        const accuracySize = Math.min(20, Math.max(8, currentPosition.coords.accuracy / 10));
+                        accuracyIndicator.style.width = `${accuracySize}px`;
+                        accuracyIndicator.style.height = `${accuracySize}px`;
+                    }
+                }
+            }
+            
+            // Conversion des degrés en direction cardinale
+            function getCardinalDirection(angle) {
+                const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+                return directions[Math.round(angle / 45) % 8];
+            }
+            
+            // Gestion de l'orientation de l'appareil
+            function handleOrientation(event) {
+                if (event.alpha !== null) {
+                    let alpha = event.alpha;
+                    
+                    // Correction pour l'orientation de l'appareil
+                    if (window.orientation === 90) {
+                        alpha = (alpha + 90) % 360;
+                    } else if (window.orientation === -90 || window.orientation === 270) {
+                        alpha = (alpha - 90) % 360;
+                    } else if (window.orientation === 180) {
+                        alpha = (alpha + 180) % 360;
+                    }
+                    
+                    currentHeading = alpha;
+                    updateCompass();
+                }
+            }
+            
+            // Obtention de la position géographique
+            function getLocation() {
+                if (navigator.geolocation) {
+                    if (watchId) {
+                        navigator.geolocation.clearWatch(watchId);
+                    }
+                    
+                    locationDisplay.textContent = "Localisation en cours...";
+                    
+                    watchId = navigator.geolocation.watchPosition(
+                        position => {
+                            currentPosition = position;
+                            qiblaDirection = calculateQiblaDirection(
+                                position.coords.latitude, 
+                                position.coords.longitude
+                            );
+                            updateCompass();
+                            updatePermissionUI(true);
+                        },
+                        error => {
+                            console.error("Erreur de géolocalisation:", error);
+                            let errorMessage = "Erreur de localisation";
+                            
+                            switch(error.code) {
+                                case error.PERMISSION_DENIED:
+                                    errorMessage = "Autorisation requise";
+                                    break;
+                                case error.POSITION_UNAVAILABLE:
+                                    errorMessage = "Service indisponible";
+                                    break;
+                                case error.TIMEOUT:
+                                    errorMessage = "Temps écoulé";
+                                    break;
+                            }
+                            
+                            locationDisplay.textContent = errorMessage;
+                            accuracyDisplay.textContent = "--";
+                            updatePermissionUI(false);
+                        },
+                        { 
+                            enableHighAccuracy: true,
+                            maximumAge: 0,
+                            timeout: 10000
+                        }
+                    );
+                } else {
+                    locationDisplay.textContent = "Géolocalisation non supportée";
+                }
+            }
+            
+            // Demande des permissions
+            function requestPermissions() {
+                // Demande de géolocalisation
+                getLocation();
+                
+                // Pour iOS, demande spécifique pour les capteurs
+                if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    DeviceOrientationEvent.requestPermission()
+                        .then(permissionState => {
+                            if (permissionState === 'granted') {
+                                window.addEventListener('deviceorientation', handleOrientation);
+                            }
+                        })
+                        .catch(console.error);
+                } else {
+                    // Pour les autres navigateurs
+                    window.addEventListener('deviceorientation', handleOrientation);
+                }
+            }
+            
+            // Mise à jour de l'UI des permissions
+            function updatePermissionUI(granted) {
+                if (granted) {
+                    permissionBtn.innerHTML = '<i class="fas fa-check"></i> <span class="hidden sm:inline">AUTORISÉ</span>';
+                } else {
+                    permissionBtn.innerHTML = '<i class="fas fa-location-dot"></i> <span class="hidden sm:inline">AUTORISER</span>';
+                }
+            }
+            
+            // Changement de style de la boussole
+            function changeCompassStyle(style) {
+                currentCompassStyle = style;
+                compassElement.className = `compass-${style}`;
+                
+                // Mise à jour de la sélection visuelle
+                styleOptions.forEach(option => {
+                    if (option.dataset.style === style) {
+                        option.classList.add('selected');
+                    } else {
+                        option.classList.remove('selected');
+                    }
+                });
+            }
+            
+            // Initialisation
+            initCompassMarkers();
+            
+            // Écouteurs d'événements
+            permissionBtn.addEventListener('click', requestPermissions);
+            reloadBtn.addEventListener('click', getLocation);
+            
+            // Sélecteur de style
+            styleOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    changeCompassStyle(this.dataset.style);
+                });
+            });
+            
+            // Saisie manuelle de position
+            document.getElementById('manual-submit').addEventListener('click', function() {
+                const lat = parseFloat(document.getElementById('manual-lat').value.replace(',', '.'));
+                const lng = parseFloat(document.getElementById('manual-lng').value.replace(',', '.'));
+                
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    currentPosition = {
+                        coords: {
+                            latitude: lat,
+                            longitude: lng,
+                            accuracy: 10
+                        }
+                    };
+                    qiblaDirection = calculateQiblaDirection(lat, lng);
+                    updateCompass();
+                    
+                    locationDisplay.textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)} (Manuelle)`;
+                    accuracyDisplay.textContent = "10 mètres (manuelle)";
+                } else {
+                    alert("Veuillez entrer des coordonnées valides");
+                }
+            });
+            
+            // Essayer de localiser approximativement par défaut
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        currentPosition = position;
+                        qiblaDirection = calculateQiblaDirection(
+                            position.coords.latitude, 
+                            position.coords.longitude
+                        );
+                        updateCompass();
+                    },
+                    () => {
+                        // En cas d'échec, on ne fait rien (le bouton "Autoriser" reste visible)
+                    }
+                );
+            }
+        });
+    </script>
+</body>
+</html>
