@@ -1005,7 +1005,7 @@ async function confirmDeleteMember(memberId, memberName) {
   try {
     const db = firebase.firestore();
     const codesDoc = await db.collection('settings').doc('presidentCodes').get();
-    const presidentCodes = codesDoc.exists ? codesDoc.data() : { memberDeletionCode: '0000' };
+    const presidentCodes = codesDoc.exists ? codesDoc.data() : { memberDeletionCode: '8585' };
     const presidentInput = document.querySelector('#delete-member-code')?.value.trim();
 
     if (!presidentInput) {
