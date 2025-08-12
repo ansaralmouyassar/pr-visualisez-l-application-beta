@@ -3211,3 +3211,17 @@ select:focus, select:active {
   background: white;
   border-top: 1px solid #eee;
 }
+
+
+
+
+
+
+
+.gallery-item img {
+  width: 100%;       /* Prend 100% de la largeur du conteneur */
+  max-width: 300px;  /* Largeur maximale */
+  height: auto;      /* Hauteur proportionnelle */
+  object-fit: cover; /* Couvre la zone sans déformation */
+  border-radius: 8px; /* Conserve les coins arrondis */
+}
