@@ -6,10 +6,7 @@
     <title>ESPACE PERSONNEL | Accès Sécurisé</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+ 
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Orbitron:wght@400;500;600;700&display=swap');
@@ -1195,6 +1192,146 @@ a:focus {
   outline: none;
   box-shadow: 0 0 0 2px var(--accent-color);
 }
+      <!-- Ajoutez ce style dans la balise <style> -->
+.notification-test {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(7, 51, 50, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--accent-color);
+    border-radius: 8px;
+    padding: 15px 25px;
+    color: var(--accent-color);
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(155, 156, 40, 0.5);
+    z-index: 1000;
+    animation: pulseGlow 2s infinite alternate;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.notification-test i {
+    font-size: 1.2em;
+    animation: iconPulse 1.5s infinite;
+}
+
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 0 10px rgba(155, 156, 40, 0.3);
+        transform: translateX(-50%) scale(1);
+    }
+    100% {
+        box-shadow: 0 0 30px rgba(155, 156, 40, 0.7);
+        transform: translateX(-50%) scale(1.02);
+    }
+}
+
+@keyframes iconPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+      <style>
+/* Ajoutez ceci à la fin de votre section <style> */
+.demo-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(7, 51, 50, 0.9);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.demo-modal.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.demo-modal-content {
+    background: var(--primary-color);
+    border: 2px solid var(--accent-color);
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(155, 156, 40, 0.6);
+    transform: scale(0.9);
+    transition: transform 0.4s ease;
+    position: relative;
+}
+
+.demo-modal.active .demo-modal-content {
+    transform: scale(1);
+}
+
+.demo-modal h2 {
+    color: var(--accent-color);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.demo-modal p {
+    color: var(--text-color);
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.demo-modal-btn {
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-light));
+    border: none;
+    border-radius: 8px;
+    color: var(--text-color);
+    padding: 12px 30px;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.demo-modal-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.demo-modal-icon {
+    font-size: 3rem;
+    color: var(--accent-color);
+    margin-bottom: 20px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+      /* Dans votre section <style> */
+#personal-content .demo-modal {
+    position: absolute; /* Changez de fixed à absolute */
+    background: rgba(7, 51, 50, 0.95); /* Fond plus opaque */
+}
+
+#personal-content .demo-modal-content {
+    border: 3px solid var(--accent-color);
+    box-shadow: 0 0 40px rgba(155, 156, 40, 0.8);
+}
     </style>
 </head>
 <body>
@@ -1387,346 +1524,201 @@ function formatDate(dateString) {
         </div>
     </div>
 
-   <script>
-        // Variables globales
-        let currentUser = null;
-        const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-// Modal Functions
-function openPrivacyModal() {
-    const modal = document.getElementById('privacyModal');
+ <script>
+    // Données fictives pour la démo
+    const demoMember = {
+        code: "DEMONSTRATION",
+        firstname: "Moussa",
+        lastname: "Ndiaye",
+        dob: "01/01/2000",
+        birthplace: "Dakar",
+        phone: "77 123 45 67",
+        email: "moussa.ndiaye@example.com",
+        address: "Rue 12, Dakar Plateau",
+        activity: "Commerçant",
+        residence: "12345678",
+        role: "Membre Actif",
+        status: "Actif",
+        contributions: {
+            Mensuelle: {
+                2023: [true, true, true, true, true, false, false, true, true, true, false, false],
+                2024: [true, true, true, true, true, true, true, true, false, false, false, false],
+                2025: [true, true, true, true, false, false, false, false, false, false, false, false]
+            },
+            globalContributions: {
+                "Participation Conférence 2023": { paid: true, note: "Payé le 15/07/2023" },
+            }
+        }
+    };
+
+    const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+
+   function showDemoModal() {
+    const modal = document.getElementById('demoModal');
     modal.classList.add('active');
 }
 
-function closePrivacyModal() {
-    const modal = document.getElementById('privacyModal');
+function closeDemoModal() {
+    const modal = document.getElementById('demoModal');
     modal.classList.remove('active');
 }
-        // Fonction pour charger les membres depuis Firestore
-        async function loadMembers() {
-            try {
-                const snapshot = await db.collection("members").get();
-                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            } catch (error) {
-                console.error("Erreur de chargement des membres:", error);
-                return [];
-            }
-        }
 
-        // Fonction de connexion MODIFIÉE
-        document.querySelector('#personal-login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const code = document.querySelector('#personal-member-code').value.trim();
-            const password = document.querySelector('#personal-password').value.trim();
-            const errorMessage = document.querySelector('#personal-error-message');
-
-            try {
-                const members = await loadMembers();
-                const member = members.find(m => m.code === code && m.dob === password);
-                
-                if (!member) {
-                    errorMessage.textContent = 'Code ou mot de passe incorrect';
-                    errorMessage.style.display = 'block';
-                    return;
-                }
-
-                currentUser = member;
-                showMemberDetail(member);
-            } catch (error) {
-                console.error('Erreur de connexion:', error);
-                errorMessage.textContent = ' ';
-                errorMessage.style.display = 'block';
-            }
-        });
-
-        // Fonction showMemberDetail MODIFIÉE
-    // Fonction showMemberDetail complètement réécrite
-async function showMemberDetail(member) {
-  try {
-    console.log('Affichage des détails pour:', member.firstname, member.lastname);
-    console.log('Données complètes:', JSON.stringify(member, null, 2));
-
-    // Afficher la page
+    // Fonction pour afficher les détails du membre
+function showMemberDetail() {
+    // Masquer login et afficher content
     document.querySelector('#personal-login').style.display = 'none';
-    document.querySelector('#personal-content').style.display = 'block';
+    const personalContent = document.querySelector('#personal-content');
+    personalContent.style.display = 'block';
+    
+    // Afficher la modale UNIQUEMENT ici (après la connexion)
+    showDemoModal();
+    
+        // Infos de base
+        document.querySelector('#personal-title').textContent = `${demoMember.firstname} ${demoMember.lastname}`;
+        document.querySelector('#personal-role').textContent = `Rôle: ${demoMember.role}`;
 
-    // Infos de base
-    document.querySelector('#personal-title').textContent = `${member.firstname} ${member.lastname}`;
-    document.querySelector('#personal-role').textContent = `Rôle: ${member.role}`;
-
-    // Informations personnelles
-    // Dans showMemberDetail()
-const personalInfo = document.querySelector('#personal-info');
-if (personalInfo) {
-  personalInfo.innerHTML = `
-    <p><strong>Code:</strong> ${member.code || 'Non renseigné'}</p>
-    <p><strong>Nom complet:</strong> ${member.firstname} ${member.lastname}</p>
-    ${member.dob ? `<p><strong>Date de naissance:</strong> ${member.dob}</p>` : ''}
-    ${member.birthplace ? `<p><strong>Lieu de naissance:</strong> ${member.birthplace}</p>` : ''}
-    ${member.phone ? `<p><strong>Téléphone:</strong> ${member.phone}</p>` : ''}
-    ${member.email ? `<p><strong>Email:</strong> ${member.email}</p>` : ''}
-    ${member.address ? `<p><strong>Adresse:</strong> ${member.address}</p>` : ''}
-    ${member.activity ? `<p><strong>Activité:</strong> ${member.activity}</p>` : ''}
-    ${member.residence ? `<p><strong>Num. CIN:</strong> ${member.residence}</p>` : ''}
-    <p><strong>Statut:</strong> ${member.status || 'Actif'}</p>
-  `;
-}
-
-   // Dans la fonction showMemberDetail()
-
-// Cotisations mensuelles
-const cotisationsContent = document.querySelector('#cotisations-content');
-const mensualContributions = member.contributions?.Mensuelle || {};
-const currentYear = new Date().getFullYear();
-
-// Générer les 3 dernières années (2023-2025)
-const years = [currentYear - 2, currentYear - 1, currentYear];
-
-cotisationsContent.innerHTML = years.map(year => {
-  const paidMonths = mensualContributions[year] || Array(12).fill(false);
-  
-  return `
-    <div class="year-section">
-      <h3>${year}</h3>
-      <div class="months-grid">
-        ${paidMonths.map((paid, index) => `
-          <div class="month ${paid ? 'paid' : 'unpaid'}">
-            <span class="month-name">${months[index]}</span>
-            <span class="status">${paid ? '✅' : '❌'}</span>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-  `;
-}).join('') || '<p>Aucune cotisation mensuelle enregistrée</p>';
-
-    // Cotisations globales
-    const globalContributions = await db.collection("contributions").get();
-    const globalCotisationsContent = document.querySelector('#global-cotisations-content');
-    globalCotisationsContent.innerHTML = globalContributions.docs
-      .map(doc => {
-        const contrib = doc.data();
-        const memberContrib = member.contributions?.globalContributions?.[contrib.name] || {};
-        return `
-          <div class="contribution-item">
-            <p><strong>${contrib.name}:</strong> 
-              ${memberContrib.paid ? '✅ Payé' : '❌ En attente'}
-              (${contrib.amount} FCFA)
-              ${memberContrib.note ? `<br><em>Note: ${memberContrib.note}</em>` : ''}
-            </p>
-          </div>
+        // Informations personnelles
+        const personalInfo = document.querySelector('#personal-info');
+        personalInfo.innerHTML = `
+            <p><strong>Code:</strong> ${demoMember.code}</p>
+            <p><strong>Nom complet:</strong> ${demoMember.firstname} ${demoMember.lastname}</p>
+            <p><strong>Date de naissance:</strong> ${demoMember.dob}</p>
+            <p><strong>Lieu de naissance:</strong> ${demoMember.birthplace}</p>
+            <p><strong>Téléphone:</strong> ${demoMember.phone}</p>
+            <p><strong>Email:</strong> ${demoMember.email}</p>
+            <p><strong>Adresse:</strong> ${demoMember.address}</p>
+            <p><strong>Activité:</strong> ${demoMember.activity}</p>
+            <p><strong>Num. CIN:</strong> ${demoMember.residence}</p>
+            <p><strong>Statut:</strong> ${demoMember.status}</p>
         `;
-      }).join('') || '<p>Aucune autre cotisation</p>';
 
-  } catch (error) {
-    console.error('Erreur showMemberDetail:', error);
-    alert('Erreur lors du chargement des données');
-  }
-}
+        // Cotisations mensuelles
+        const cotisationsContent = document.querySelector('#cotisations-content');
+        const currentYear = new Date().getFullYear();
+        const years = [currentYear - 2, currentYear - 1, currentYear];
 
-        // Gestion de la connexion
-        document.querySelector('#personal-login-form').addEventListener('submit', async (e) => {
+        cotisationsContent.innerHTML = years.map(year => {
+            const paidMonths = demoMember.contributions.Mensuelle[year] || Array(12).fill(false);
+            
+            return `
+                <div class="year-section">
+                    <h3>${year}</h3>
+                    <div class="months-grid">
+                        ${paidMonths.map((paid, index) => `
+                            <div class="month ${paid ? 'paid' : 'unpaid'}">
+                                <span class="month-name">${months[index]}</span>
+                                <span class="status">${paid ? '✅' : '❌'}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Cotisations globales
+        const globalCotisationsContent = document.querySelector('#global-cotisations-content');
+        globalCotisationsContent.innerHTML = `
+            <div class="contribution-item">
+                <p><strong>Participation 2023:</strong> ✅ Effectué <br><em>Note: Complet</em></p>
+            </div>
+           
+        `;
+    }
+
+    // Gestion de la connexion (accepte n'importe quelle valeur)
+    document.querySelector('#personal-login-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        showMemberDetail();
+    });
+
+    function logoutPersonal() {
+        document.querySelector('#personal-content').style.display = 'none';
+        document.querySelector('#personal-login').style.display = 'flex';
+        document.querySelector('#personal-login-form').reset();
+        document.querySelector('#personal-error-message').style.display = 'none';
+    }
+
+    function payViaWave() {
+        alert("Démonstration: Redirection vers Wave désactivée en mode démo");
+    }
+
+    function payViaOrangeMoney() {
+        alert("Démonstration: Redirection vers Orange Money désactivée en mode démo");
+    }
+
+    // Modal Functions
+    function openPrivacyModal() {
+        const modal = document.getElementById('privacyModal');
+        modal.classList.add('active');
+    }
+
+    function closePrivacyModal() {
+        const modal = document.getElementById('privacyModal');
+        modal.classList.remove('active');
+    }
+
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animation du bouton de profil
+        const trigger = document.getElementById('profileTrigger');
+        const panel = document.getElementById('authPanel');
+        
+        trigger.addEventListener('click', function() {
+            panel.classList.toggle('active');
+            if (panel.classList.contains('active')) {
+                trigger.style.transform = 'translateY(-20px) scale(1.1)';
+                trigger.style.boxShadow = 
+                    '0 0 0 8px rgba(155, 156, 40, 0.2), ' +
+                    '0 20px 50px rgba(0, 0, 0, 0.5), ' +
+                    'inset 0 0 30px rgba(31, 74, 73, 0.8)';
+                const icon = trigger.querySelector('.profile-icon');
+                icon.style.transform = 'scale(1.2) rotateY(360deg)';
+                icon.style.color = 'var(--accent-color)';
+                setTimeout(() => {
+                    icon.style.transform = 'scale(1.1)';
+                }, 600);
+            } else {
+                trigger.style.transform = 'translateY(0) scale(1)';
+                trigger.style.boxShadow = 
+                    '0 0 0 4px rgba(155, 156, 40, 0.3), ' +  
+                    '0 10px 30px rgba(0, 0, 0, 0.4), ' +
+                    'inset 0 0 20px rgba(31, 74, 73, 0.6)';
+            }
+        });
+
+        // Gestion du formulaire de suggestion
+        document.querySelector('#suggestion-form')?.addEventListener('submit', (e) => {
             e.preventDefault();
-            const code = document.querySelector('#personal-member-code').value.trim();
-            const password = document.querySelector('#personal-password').value.trim();
-            const errorMessage = document.querySelector('#personal-error-message');
-
-            try {
-                const members = await loadData('members');
-                const member = members.find(m => m.code === code && (m.dob === password || password === 'admin'));
-                if (!member) {
-                    errorMessage.textContent = 'Code ou mot de passe incorrect';
-                    errorMessage.style.display = 'block';
-                    return;
-                }
-
-                currentUser = { code: member.code, role: member.role };
-                showMemberDetail(member.code);
-            } catch (error) {
-                console.error('Erreur loginPersonal:', error);
-                errorMessage.textContent = ' ';
-                errorMessage.style.display = 'block';
+            const suggestionText = document.getElementById('suggestion-text').value.trim();
+            
+            if (!suggestionText) {
+                alert("Veuillez écrire une suggestion avant d'envoyer");
+                return;
             }
+            
+            alert("Démonstration: Suggestion envoyée!\n\n" + suggestionText);
+            document.getElementById('suggestion-text').value = '';
         });
 
-        function logoutPersonal() {
-            currentUser = null;
-            document.querySelector('#personal-content').style.display = 'none';
-            document.querySelector('#personal-login').style.display = 'flex';
-            document.querySelector('#personal-login-form').reset();
-            document.querySelector('#personal-error-message').style.display = 'none';
-        }
-
-        function payViaWave() {
-            window.open('https://pay.wave.com/m/M_sn_dyIw8DZWV46K/c/sn/', '_blank');
-        }
-
-        function payViaOrangeMoney() {
-            window.open('https://sugu.orange-sonatel.com/mp/dcOqoOdqQorv2sQ6HNJV7C', '_blank');
-        }
-        
-      
-        // Initialisation des particules
-        document.addEventListener('DOMContentLoaded', function() {
-            const container = document.getElementById('particles-js');
-            const particleCount = Math.floor(window.innerWidth / 15);
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                
-                const size = Math.random() * 6 + 2;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = `${Math.random() * 120 - 20}%`;
-                
-                const duration = Math.random() * 20 + 10;
-                const delay = Math.random() * 5;
-                particle.style.animation = `float ${duration}s linear ${delay}s infinite`;
-                
-                particle.style.opacity = Math.random() * 0.2;
-                
-                container.appendChild(particle);
-            }
-            
-            // Gestion du clic sur l'icône
-            const trigger = document.getElementById('profileTrigger');
-            const panel = document.getElementById('authPanel');
-          
-          const nameTrigger = document.getElementById('personal-title');
-nameTrigger.addEventListener('click', async function() {
-    if (currentUser) {
-        // Animation de rafraîchissement
-        nameTrigger.classList.add('refreshing');
-        setTimeout(() => {
-            nameTrigger.classList.remove('refreshing');
-        }, 1000);
-
-        // Recharger les données du membre
-        try {
-            const members = await loadMembers();
-            const member = members.find(m => m.code === currentUser.code);
-            if (member) {
-                currentUser = member;
-                await showMemberDetail(member);
-            } else {
-                alert('Erreur: Utilisateur non trouvé');
-                logoutPersonal();
-            }
-        } catch (error) {
-            console.error('Erreur lors du rafraîchissement:', error);
-            alert('Erreur lors du rafraîchissement des données');
-        }
-    }
-});
-            
-           trigger.addEventListener('click', async function() {
-    if (currentUser) {
-        // Animation de rafraîchissement
-        trigger.classList.add('refreshing');
-        setTimeout(() => {
-            trigger.classList.remove('refreshing');
-        }, 1000);
-
-        // Recharger les données du membre
-        try {
-            const members = await loadMembers();
-            const member = members.find(m => m.code === currentUser.code);
-            if (member) {
-                currentUser = member;
-                await showMemberDetail(member);
-            } else {
-                alert('Erreur: Utilisateur non trouvé');
-                logoutPersonal();
-            }
-        } catch (error) {
-            console.error('Erreur lors du rafraîchissement:', error);
-            alert('Erreur lors du rafraîchissement des données');
-        }
-    } else {
-        // Ouvrir/fermer le panneau de connexion
-        panel.classList.toggle('active');
-        if (panel.classList.contains('active')) {
-            trigger.style.transform = 'translateY(-20px) scale(1.1)';
-            trigger.style.boxShadow = 
-                '0 0 0 8px rgba(155, 156, 40, 0.2), ' +
-                '0 20px 50px rgba(0, 0, 0, 0.5), ' +
-                'inset 0 0 30px rgba(31, 74, 73, 0.8)';
-            const icon = trigger.querySelector('.profile-icon');
-            icon.style.transform = 'scale(1.2) rotateY(360deg)';
-            icon.style.color = 'var(--accent-color)';
+        // Rafraîchissement des données
+        document.getElementById('personal-title').addEventListener('click', function() {
+            this.classList.add('refreshing');
             setTimeout(() => {
-                icon.style.transform = 'scale(1.1)';
-            }, 600);
-        } else {
-            trigger.style.transform = 'translateY(0) scale(1)';
-            trigger.style.boxShadow = 
-                '0 0 0 4px rgba(155, 156, 40, 0.3), ' +  
-                '0 10px 30px rgba(0, 0, 0, 0.4), ' +
-                'inset 0 0 20px rgba(31, 74, 73, 0.6)';
-        }
-    }
-});
-            // Effet de lumière qui suit la souris
-            const spotlight = document.querySelector('.spotlight');
-            document.addEventListener('mousemove', (e) => {
-                spotlight.style.left = `${e.clientX}px`;
-                spotlight.style.top = `${e.clientY}px`;
-            });
-            
-            // Gestion du formulaire de suggestion
-           // ==================== FONCTIONS SUGGESTIONS ====================
-
-// ==================== GESTION DES SUGGESTIONS ====================
-document.querySelector('#suggestion-form')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    // Vérifier que l'utilisateur est connecté
-    if (!currentUser) {
-        alert("Vous devez être connecté pour envoyer une suggestion");
-        return;
-    }
-
-    const suggestionText = document.getElementById('suggestion-text').value.trim();
-    
-    if (!suggestionText) {
-        alert("Veuillez écrire une suggestion avant d'envoyer");
-        return;
-    }
-
-    // Préparer les données à sauvegarder
-    const suggestionData = {
-        text: suggestionText,
-        memberCode: currentUser.code,
-        memberName: `${currentUser.firstname} ${currentUser.lastname}`,
-        createdAt: new Date().toISOString(),
-        status: "new"
-    };
-
-    try {
-        // Sauvegarder dans Firestore
-        await db.collection('suggestions').add(suggestionData);
-        
-        // Réinitialiser le formulaire
-        document.getElementById('suggestion-text').value = '';
-        
-        // Confirmation à l'utilisateur
-        alert("Votre suggestion a été envoyée avec succès !");
-        
-    } catch (error) {
-        console.error("Erreur lors de l'envoi de la suggestion:", error);
-        alert("Une erreur est survenue lors de l'envoi de votre suggestion");
-    }
-});
-            
-            // Vérifier si l'utilisateur est déjà connecté (pour le développement)
-            if (window.location.hash === '#debug') {
-                document.querySelector('#personal-member-code').value = 'MEM001';
-                document.querySelector('#personal-password').value = '01011980';
-                document.querySelector('#authPanel').classList.add('active');
-            }
+                this.classList.remove('refreshing');
+                alert("Démonstration: Données rafraîchies");
+            }, 1000);
         });
-    </script>
+    });
+</script>
+  <!-- Ajoutez ceci avant </body> -->
+<div id="personal-content" style="display: none;">
+    <div class="demo-modal" id="demoModal">
+        <div class="demo-modal-content">
+            <i class="fas fa-exclamation-triangle demo-modal-icon"></i>
+            <h2>ATTENTION</h2>
+        <p>CE CI EST UN TEST FICTIF<br>Les données affichées sont des simulations pour démonstration</p>
+        <button class="demo-modal-btn" onclick="closeDemoModal()">J'ai compris</button>
+    </div>
+</div>
 </body>
 </html>
