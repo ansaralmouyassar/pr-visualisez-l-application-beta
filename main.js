@@ -1,24 +1,5 @@
 // Configuration Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyA-TpblN0YnekG2tKFRhjOwwEd80qke5pk",
-  authDomain: "ansar-69617.firebaseapp.com",
-  projectId: "ansar-69617",
-  storageBucket: "ansar-69617.firebasestorage.app",
-  messagingSenderId: "1075104578958",
-  appId: "1:1075104578958:web:b5d55c76def4d1d430b8df",
-  measurementId: "G-5XLSPLXH81"
-};
 
-// Initialiser Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const storage = firebase.storage();
-const auth = firebase.auth();
-
-// Authentification anonyme
-auth.signInAnonymously().catch(error => {
-  console.error('Erreur lors de l\'authentification anonyme:', error);
-});
 
 // Variables globales
 let currentUser = null;
@@ -62,16 +43,6 @@ document.querySelector('#edit-member-filter')?.addEventListener('change', update
   });
 });
 
-// FONCTIONS DE BASE POUR FIRESTORE
-async function loadData(collection) {
-  try {
-    const snapshot = await firebase.firestore().collection(collection).get();
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  } catch (error) {
-    console.error(`Erreur lors du chargement de ${collection}:`, error);
-    throw error;
-  }
-}
 
 async function saveData(collection, data, docId = null) {
   try {
@@ -110,6 +81,9 @@ async function uploadFile(file, path) {
   }
 }
 
+function openImage(url) {
+  window.open(url, '_blank');
+}
 // Charger les métiers et projets dans #business-cards et #home-business-cards
 async function loadBusinessCards() {
   console.log('loadBusinessCards appelé'); // Pour débogage
@@ -679,7 +653,164 @@ async function generateMemberCode() {
   }
 }
 
+// Dans votre main.js
+const membersData = [
+    {number: '000', name: 'Cheikh Abdallah Niass', role: 'Président'},
 
+  {number: '001', name: 'Mouhamed Niang', role: 'Président'},
+  {number: '002', name: 'Ahmed Saïd Aidara', role: 'Vice-Secrétaire'},
+  {number: '003', name: 'Mouhidine Niass', role: 'Trésorier'},
+  {number: '004', name: 'Mame Hawa', role: 'Vice-Secrétaire'},
+  {number: '005', name: 'Cheikh I. Maich Niass', role: 'Admin'},
+  {number: '006', name: 'S. Mamoune Niass', role: 'Secrétaire'},
+  {number: '007', name: 'Mouhamed Dia', role: 'Membre'},
+  {number: '008', name: 'Cheikh Ibrahim Abdoul Malick Niass', role: 'Membre'},
+  {number: '009', name: 'Mohamed Diack', role: 'Membre'},
+  {number: '010', name: 'Fatimata Zahra Salane', role: 'Membre'},
+  {number: '011', name: 'Mahi Habib Niass', role: 'Membre'},
+  {number: '012', name: 'Moustapha Diomaye Dionw', role: 'Membre'},
+  {number: '013', name: 'Mamadou Ceesay', role: 'Membre'},
+  {number: '014', name: 'Ismaila Diop', role: 'Membre'},
+  {number: '015', name: 'Tareck Mouhamed Lamine Niasse', role: 'Membre'},
+  {number: '016', name: 'Mouhamadou Lamine Ka', role: 'Membre'},
+  {number: '017', name: 'Abdaallah Izoudine Thiam', role: 'Membre'},
+  {number: '018', name: 'Niass Cheikh Abdoullah', role: 'Membre'},
+  {number: '019', name: 'Cheikh Ibrahim Niass', role: 'Membre'},
+  {number: '020', name: 'Abdoul Aziz Diagne', role: 'Membre'},
+  {number: '021', name: 'Aissata Diallo', role: 'Membre'},
+  {number: '022', name: 'Weedad Monayajo', role: 'Membre'},
+  {number: '023', name: 'BA Mouhamadou', role: 'Membre'},
+  {number: '024', name: 'Abdoulaye Thiam', role: 'Membre'},
+  {number: '025', name: 'Adam Diaw', role: 'Membre'},
+  {number: '026', name: 'Aissatou Diaw', role: 'Membre'},
+  {number: '027', name: 'CHEIKH BAYESOW', role: 'Membre'},
+  {number: '028', name: 'Cheikh Ibrahima Ba', role: 'Membre'},
+  {number: '029', name: 'Cheikh Ibrahima Niass', role: 'Membre'},
+  {number: '030', name: 'Fatiha Niang', role: 'Membre'},
+  {number: '031', name: 'Fatima Zahra Niang', role: 'Membre'},
+  {number: '032', name: 'Mbaye Thiam Seye', role: 'Membre'},
+  {number: '033', name: 'Madina Sakho', role: 'Membre'},
+  {number: '034', name: 'Pape Balla Ndao', role: 'Membre'},
+  {number: '035', name: 'Abdallah Dramé', role: 'Membre'},
+  {number: '036', name: 'Adama Diaw', role: 'Membre'},
+  {number: '037', name: 'imam Assan Aïdara', role: 'Membre'},
+  {number: '038', name: 'Mame Oureye Ndione', role: 'Membre'},
+  {number: '039', name: 'Adja Mariama DIA', role: 'Trésorier'},
+  {number: '040', name: 'Maryam Thiam', role: 'Membre'},
+  {number: '041', name: 'Ada Coundoul', role: 'Membre'},
+  {number: '042', name: 'Oumou Souleymine Niass', role: 'Membre'},
+  {number: '043', name: 'Alioune Badara Salane', role: 'Membre'},
+  {number: '044', name: 'Alpha Diop', role: 'Membre'},
+  {number: '045', name: 'Babacar Dia', role: 'Membre'},
+  {number: '046', name: 'Badou Badji', role: 'Membre'},
+  {number: '047', name: 'Diabou Diarra Diagne', role: 'Membre'},
+  {number: '048', name: 'Fama Sarr', role: 'Membre'},
+  {number: '049', name: 'Hady Baba Niass', role: 'Membre'},
+  {number: '050', name: 'Modou Fall', role: 'Membre'},
+  {number: '051', name: 'Mouhamed Dia', role: 'Membre'},
+  {number: '052', name: 'Adama Gadji', role: 'Membre'},
+  {number: '053', name: 'Maïmouna Thiam', role: 'Membre'},
+  {number: '054', name: 'Mama Hawa Niass', role: 'Membre'},
+  {number: '055', name: 'Rokhaya Tidiany Coundoul', role: 'Membre'},
+  {number: '056', name: 'Fatou Gueye', role: 'Membre'},
+  {number: '057', name: 'Cheikh Ibrahim Dieng', role: 'Membre'},
+  {number: '058', name: 'Cheikhany Niasse', role: 'Membre'},
+  {number: '059', name: 'Dieng Mouhamad', role: 'Membre'},
+  {number: '060', name: 'El Hadji Ibrahima Niass', role: 'Membre'},
+  {number: '061', name: 'Mame Madieum Niang', role: 'Membre'},
+  {number: '062', name: 'Mame Oureye Ndione', role: 'Membre'},
+  {number: '063', name: 'Oumoul Khayri Keita', role: 'Membre'},
+  {number: '064', name: 'Ayid Ka', role: 'Membre'},
+  {number: '065', name: 'Cheikh Biteye', role: 'Membre'},
+  {number: '066', name: 'Ibrahima Kebe', role: 'Membre'},
+  {number: '067', name: 'Ismaïla Sarr', role: 'Membre'},
+  {number: '068', name: 'Maguette Gadji', role: 'Membre'},
+  {number: '069', name: 'Mamadou Sarr', role: 'Membre'},
+  {number: '070', name: 'Miftahul Khaïry', role: 'Membre'},
+  {number: '071', name: 'Mouhamadoul Mamoume Niass', role: 'Membre'},
+  {number: '072', name: 'Mouhamed Lamine Niass', role: 'Membre'},
+  {number: '073', name: 'Mouhamed Niass', role: 'Membre'},
+  {number: '074', name: 'Mouhammad Abdallah Niass', role: 'Membre'},
+  {number: '075', name: 'Ousmane Niass', role: 'Membre'},
+  {number: '076', name: 'Pape Momar Diaw', role: 'Membre'},
+  {number: '077', name: 'Pape Moussa Sow', role: 'Membre'},
+  {number: '078', name: 'Rokhaya', role: 'Membre'},
+  {number: '079', name: 'Samba Agne', role: 'Membre'},
+  {number: '080', name: 'Baba Niang', role: 'Membre'},
+  {number: '081', name: 'Aminata Kébé', role: 'Membre'},
+  {number: '082', name: 'Mama Hawa Niass', role: 'Membre'},
+  {number: '083', name: 'BAYE ASSANE NIASSE', role: 'Membre'},
+  {number: '084', name: 'El Hadji Djibril Niasse', role: 'Membre'},
+  {number: '085', name: 'MOUHAMED EL BACHIR NIANG', role: 'Membre'},
+  {number: '086', name: 'Dame Gadji', role: 'Membre'},
+  {number: '087', name: 'Aminata Fall', role: 'Membre'},
+  {number: '088', name: 'Nazir Diaw', role: 'Membre'},
+  {number: '089', name: 'Mame Oureye Ndione', role: 'Membre'},
+  {number: '090', name: 'Baye Cissé', role: 'Trésorier'},
+  {number: '091', name: 'Ibrahima Dia', role: 'Membre'},
+  {number: '092', name: 'Abdoul Malick Sow', role: 'Membre'},
+  {number: '093', name: 'Cheikh Baye Fall', role: 'Membre'},
+  {number: '094', name: 'Ibrahima Niass', role: 'Membre'},
+  {number: '095', name: 'Mouhamed Diak diak', role: 'Membre'},
+  {number: '097', name: 'Pape Youssoupha Sy', role: 'Membre'},
+  {number: '098', name: 'Google Play Review', role: 'Teste'},
+  {number: '099', name: 'Ibrahim Niang', role: 'Membre'},
+];
+
+function renderMembers() {
+  const membersList = document.getElementById('members-list');
+  
+  membersData.forEach(member => {
+    const memberCard = document.createElement('div');
+    memberCard.className = 'member-card';
+    memberCard.innerHTML = `
+      <div class="member-number">${member.number}</div>
+      <div class="member-name">${member.name}</div>
+      <div class="member-role">${member.role}</div>
+    `;
+    membersList.appendChild(memberCard);
+  });
+}
+
+// Appelez cette fonction quand la page membres est chargée
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('members')) {
+    renderMembers();
+  }
+});
+
+
+// Dans votre main.js
+const booksData = [
+  {
+    title: 'LISTE DES LIVRES',
+        category: 'CETTE PAGE SERA DISPONIBLE BIENTOT', 
+
+  },
+ 
+];
+
+function renderLibrary() {
+  const libraryContent = document.getElementById('library-content');
+  
+  booksData.forEach(book => {
+    const bookItem = document.createElement('div');
+    bookItem.className = 'library-item';
+    bookItem.innerHTML = `
+      <h3>${book.title}</h3>
+      <p class="book-category">Notes: ${book.category}</p>
+      <button class="download-btn" onclick="downloadPDF('${book.pdfUrl}')"> </button>
+    `;
+    libraryContent.appendChild(bookItem);
+  });
+}
+
+// Appelez cette fonction quand la page bibliothèque est chargée
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('library')) {
+    renderLibrary();
+  }
+});
 async function findAvailableCodes() {
   const members = await loadData('members');
   const existingCodes = members.map(m => parseInt(m.code)).filter(c => !isNaN(c));
@@ -750,7 +881,6 @@ async function updateMembersList() {
 
   } catch (error) {
     console.error('Erreur updateMembersList:', error);
-    alert('Erreur lors du chargement de la liste des membres');
   }
 }
 
@@ -1451,7 +1581,6 @@ async function updateMessagesList() {
     console.log('Liste des messages mise à jour');
   } catch (error) {
     console.error('Erreur updateMessagesList:', error);
-    alert('Erreur lors du chargement des messages');
   }
 }
 
@@ -1735,7 +1864,6 @@ async function updateSuggestionsList() {
     console.log('Liste des suggestions mise à jour');
   } catch (error) {
     console.error('Erreur updateSuggestionsList:', error);
-    alert('Erreur lors du chargement des suggestions');
   }
 }
 
@@ -1827,7 +1955,6 @@ async function updateContributionsAdminList() {
       `).join('') || '<p>Aucune cotisation disponible</p>';
   } catch (error) {
     console.error('Erreur updateContributionsAdminList:', error);
-    alert('Erreur lors du chargement des cotisations');
   }
 }
 
@@ -2009,7 +2136,6 @@ async function manageGlobalContribution(contributionId, contributionName) {
     }
   } catch (error) {
     console.error('Erreur manageGlobalContribution:', error);
-    alert('Erreur lors du chargement des paiements');
   }
 }
 
@@ -2346,7 +2472,6 @@ async function updateHomeGallery() {
       `).join('') || '<p>Aucune image disponible</p>';
   } catch (error) {
     console.error('Erreur updateHomeGallery:', error);
-    alert('Erreur lors du chargement de la galerie');
   }
 }
 
@@ -2712,7 +2837,6 @@ async function updateStats() {
     renderStatsChart('bar');
 } catch (error) {
     console.error('Erreur updateStats:', error.message, error.stack);
-    alert('Erreur lors du chargement des statistiques : ' + error.message);
   }
 }
 
