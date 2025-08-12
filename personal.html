@@ -1323,9 +1323,9 @@ a:focus {
     50% { transform: scale(1.1); }
 }
       /* Dans votre section <style> */
-#personal-content .demo-modal {
-    position: absolute; /* Changez de fixed à absolute */
-    background: rgba(7, 51, 50, 0.95); /* Fond plus opaque */
+.demo-modal {
+    position: fixed;
+    background: rgba(7, 51, 50, 0.95);
 }
 
 #personal-content .demo-modal-content {
@@ -1522,14 +1522,22 @@ function formatDate(dateString) {
                 </div>
             </div>
         </div>
+      <div class="demo-modal" id="demoModal">
+        <div class="demo-modal-content">
+            <i class="fas fa-exclamation-triangle demo-modal-icon"></i>
+            <h2>ATTENTION</h2>
+            <p>CECI EST UN TEST FICTIF<br>Les données affichées sont des simulations pour démonstration</p>
+            <button class="demo-modal-btn" onclick="closeDemoModal()">J'ai compris</button>
+        </div>
+    </div>
     </div>
 
  <script>
     // Données fictives pour la démo
     const demoMember = {
         code: "DEMONSTRATION",
-        firstname: "Moussa",
-        lastname: "Ndiaye",
+        firstname: "Démonstration",
+        lastname: " ",
         dob: "01/01/2000",
         birthplace: "Dakar",
         phone: "77 123 45 67",
@@ -1553,7 +1561,8 @@ function formatDate(dateString) {
 
     const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 
-   function showDemoModal() {
+  function showDemoModal() {
+    console.log("Affichage de la modale de démonstration");
     const modal = document.getElementById('demoModal');
     modal.classList.add('active');
 }
@@ -1566,64 +1575,68 @@ function closeDemoModal() {
     // Fonction pour afficher les détails du membre
 function showMemberDetail() {
     // Masquer login et afficher content
-    document.querySelector('#personal-login').style.display = 'none';
+    const loginContainer = document.querySelector('#personal-login');
     const personalContent = document.querySelector('#personal-content');
+    
+    loginContainer.style.display = 'none';
     personalContent.style.display = 'block';
     
-    // Afficher la modale UNIQUEMENT ici (après la connexion)
-    showDemoModal();
+    // Forcer l'affichage de la modale après un léger délai pour s'assurer que le DOM est prêt
+    setTimeout(() => {
+        const modal = document.getElementById('demoModal');
+        modal.classList.add('active');
+    }, 100); // Délai de 100ms pour permettre le rendu du DOM
     
-        // Infos de base
-        document.querySelector('#personal-title').textContent = `${demoMember.firstname} ${demoMember.lastname}`;
-        document.querySelector('#personal-role').textContent = `Rôle: ${demoMember.role}`;
+    // Infos de base
+    document.querySelector('#personal-title').textContent = `${demoMember.firstname} ${demoMember.lastname}`;
+    document.querySelector('#personal-role').textContent = `Rôle: ${demoMember.role}`;
 
-        // Informations personnelles
-        const personalInfo = document.querySelector('#personal-info');
-        personalInfo.innerHTML = `
-            <p><strong>Code:</strong> ${demoMember.code}</p>
-            <p><strong>Nom complet:</strong> ${demoMember.firstname} ${demoMember.lastname}</p>
-            <p><strong>Date de naissance:</strong> ${demoMember.dob}</p>
-            <p><strong>Lieu de naissance:</strong> ${demoMember.birthplace}</p>
-            <p><strong>Téléphone:</strong> ${demoMember.phone}</p>
-            <p><strong>Email:</strong> ${demoMember.email}</p>
-            <p><strong>Adresse:</strong> ${demoMember.address}</p>
-            <p><strong>Activité:</strong> ${demoMember.activity}</p>
-            <p><strong>Num. CIN:</strong> ${demoMember.residence}</p>
-            <p><strong>Statut:</strong> ${demoMember.status}</p>
-        `;
+    // Informations personnelles
+    const personalInfo = document.querySelector('#personal-info');
+    personalInfo.innerHTML = `
+        <p><strong>Code:</strong> ${demoMember.code}</p>
+        <p><strong>Nom complet:</strong> ${demoMember.firstname} ${demoMember.lastname}</p>
+        <p><strong>Date de naissance:</strong> ${demoMember.dob}</p>
+        <p><strong>Lieu de naissance:</strong> ${demoMember.birthplace}</p>
+        <p><strong>Téléphone:</strong> ${demoMember.phone}</p>
+        <p><strong>Email:</strong> ${demoMember.email}</p>
+        <p><strong>Adresse:</strong> ${demoMember.address}</p>
+        <p><strong>Activité:</strong> ${demoMember.activity}</p>
+        <p><strong>Num. CIN:</strong> ${demoMember.residence}</p>
+        <p><strong>Statut:</strong> ${demoMember.status}</p>
+    `;
 
-        // Cotisations mensuelles
-        const cotisationsContent = document.querySelector('#cotisations-content');
-        const currentYear = new Date().getFullYear();
-        const years = [currentYear - 2, currentYear - 1, currentYear];
+    // Cotisations mensuelles
+    const cotisationsContent = document.querySelector('#cotisations-content');
+    const currentYear = new Date().getFullYear();
+    const years = [currentYear - 2, currentYear - 1, currentYear];
 
-        cotisationsContent.innerHTML = years.map(year => {
-            const paidMonths = demoMember.contributions.Mensuelle[year] || Array(12).fill(false);
-            
-            return `
-                <div class="year-section">
-                    <h3>${year}</h3>
-                    <div class="months-grid">
-                        ${paidMonths.map((paid, index) => `
-                            <div class="month ${paid ? 'paid' : 'unpaid'}">
-                                <span class="month-name">${months[index]}</span>
-                                <span class="status">${paid ? '✅' : '❌'}</span>
-                            </div>
-                        `).join('')}
-                    </div>
+    cotisationsContent.innerHTML = years.map(year => {
+        const paidMonths = demoMember.contributions.Mensuelle[year] || Array(12).fill(false);
+        
+        return `
+            <div class="year-section">
+                <h3>${year}</h3>
+                <div class="months-grid">
+                    ${paidMonths.map((paid, index) => `
+                        <div class="month ${paid ? 'paid' : 'unpaid'}">
+                            <span class="month-name">${months[index]}</span>
+                            <span class="status">${paid ? '✅' : '❌'}</span>
+                        </div>
+                    `).join('')}
                 </div>
-            `;
-        }).join('');
-
-        // Cotisations globales
-        const globalCotisationsContent = document.querySelector('#global-cotisations-content');
-        globalCotisationsContent.innerHTML = `
-            <div class="contribution-item">
-                <p><strong>Participation 2023:</strong> ✅ Effectué <br><em>Note: Complet</em></p>
             </div>
-           
         `;
-    }
+    }).join('');
+
+    // Cotisations globales
+    const globalCotisationsContent = document.querySelector('#global-cotisations-content');
+    globalCotisationsContent.innerHTML = `
+        <div class="contribution-item">
+            <p><strong>Participation 2023:</strong> ✅ Effectué <br><em>Note: Complet</em></p>
+        </div>
+    `;
+}
 
     // Gestion de la connexion (accepte n'importe quelle valeur)
     document.querySelector('#personal-login-form').addEventListener('submit', (e) => {
@@ -1711,14 +1724,6 @@ function showMemberDetail() {
     });
 </script>
   <!-- Ajoutez ceci avant </body> -->
-<div id="personal-content" style="display: none;">
-    <div class="demo-modal" id="demoModal">
-        <div class="demo-modal-content">
-            <i class="fas fa-exclamation-triangle demo-modal-icon"></i>
-            <h2>ATTENTION</h2>
-        <p>CE CI EST UN TEST FICTIF<br>Les données affichées sont des simulations pour démonstration</p>
-        <button class="demo-modal-btn" onclick="closeDemoModal()">J'ai compris</button>
-    </div>
-</div>
+
 </body>
 </html>
